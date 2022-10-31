@@ -1,10 +1,10 @@
 {
-  "name": "crudapp",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "nodemon": "app.js"
+    "nodemon": "server.js"
   },
   "author": "Usamaz",
   "license": "ISC",

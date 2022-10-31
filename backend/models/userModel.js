@@ -19,6 +19,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
+    approve: {
+      type: Boolean,
+      required: true,
+    },
+    path: {
+      type: String,
+      required: false,
+    },
+    // notifies:[{}],
   },
   {
     timestamps: true,
@@ -26,7 +35,7 @@ const userSchema = new mongoose.Schema(
 );
 
 // signup
-userSchema.statics.signup = async function (email, password, admin) {
+userSchema.statics.signup = async function (email, password, admin, approve) {
   // validation
   if (!email || !password) {
     throw Error("All fields must be filled");
@@ -46,13 +55,15 @@ userSchema.statics.signup = async function (email, password, admin) {
   const enrate = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, enrate);
 
-  const user = await this.create({ email, password: hash, admin });
+  //creating user
+  const user = await this.create({ email, password: hash, admin, approve });
 
   return user;
 };
 
 // login
 userSchema.statics.login = async function (email, password) {
+  // console.log("usamadsafdgsadaesf");
   // validation
   if (!email || !password) {
     throw Error("All fields must be filled");

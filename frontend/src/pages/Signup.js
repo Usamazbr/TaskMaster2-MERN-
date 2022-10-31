@@ -5,22 +5,30 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [admin, setAdmin] = useState(false);
+  const [approve, setApprove] = useState(false);
   const { signup, err, loadState } = useSignup();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(admin);
-    await signup(email, password, admin);
+    setApprove(false);
+    await signup(email, password, admin, approve);
   };
   const toggle = () => {
     var toggleBox = document.getElementById("adminCheck");
-
     if (toggleBox.checked === true) {
       setAdmin(true);
     } else {
       setAdmin(false);
     }
   };
+  // const toggleAp = () => {
+  //   var toggAp = document.getElementById("apCheck");
+  //   if (toggAp.checked === true) {
+  //     setApprove(true);
+  //   } else {
+  //     setApprove(false);
+  //   }
+  // };
 
   return (
     <form className="signup" onSubmit={handleSubmit}>
@@ -48,8 +56,15 @@ const Signup = () => {
       <label className="switch">
         Are you making an admin account?
         <input type="checkbox" id="adminCheck" onClick={toggle} />
-        <span className="slider round"></span>
+        {/* <span className="slider round"></span> */}
       </label>
+
+      {/* <label className="switch">
+        Approval
+        <input type="checkbox" id="apCheck" onClick={toggleAp} />
+      </label> */}
+
+      <label>{!admin && <input />}</label>
 
       <button disabled={loadState}>Sign up</button>
       {err && <div className="error">{err}</div>}

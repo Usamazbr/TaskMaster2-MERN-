@@ -15,8 +15,6 @@ const taskSchema = new Schema(
     team: {
       type: String,
       require: true,
-      // type: Schema.Types.Mixed,
-      // required: true,
     },
     prior: {
       type: Number,
@@ -34,12 +32,16 @@ const taskSchema = new Schema(
       type: Boolean,
       required: false,
     },
-    members: {
-      type: Array,
-      required: false,
+    notf_id: {
+      type: String,
+      required: true,
     },
     user_id: {
       type: String,
+      required: true,
+    },
+    approved: {
+      type: Boolean,
       required: true,
     },
     // comment: String,

@@ -1,5 +1,7 @@
 const Task = require("../models/taskModel");
 const mongoose = require("mongoose");
+const Notify = require("../models/notifyModel");
+const User = require("../models/userModel");
 
 // get all Tasks
 const getTasks = async (req, res) => {
@@ -15,6 +17,32 @@ const getTasks = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
+};
+
+// delete a notification
+const deltNots2 = async (req, res) => {
+  const Nots_id = req.params.User;
+  // console.log(Nots_id);
+
+  // const reqr = await Notify.findById(Nots_id);
+  // console.log(reqr.req_id);
+  const taskp = await Task.findOneAndUpdate(
+    { notf_id: Nots_id },
+    {
+      approved: true,
+    },
+    { returnOriginal: false }
+  );
+  console.log(taskp);
+  if (!taskp) {
+    return res.status(400).json({ error: "Failed to approve" });
+  }
+  const Not1 = await Notify.findOneAndDelete({ _id: Nots_id });
+
+  if (!Not1) {
+    return res.status(400).json({ error: "No such task" });
+  }
+  res.status(200).json(taskp);
 };
 
 // get a single Task
@@ -36,7 +64,18 @@ const getTask = async (req, res) => {
 
 // create a new Task
 const createTask = async (req, res) => {
-  const { title, details, team, prior, ongoing, completed, protask } = req.body;
+  const {
+    title,
+    details,
+    team,
+    prior,
+    ongoing,
+    completed,
+    protask,
+    selected,
+    approved,
+    selected2,
+  } = req.body;
 
   let emptyFields = [];
 
@@ -55,22 +94,69 @@ const createTask = async (req, res) => {
       .json({ error: "Please fill in all the fields", emptyFields });
   }
 
-  // Database
-  try {
-    const user_id = req.user._id;
-    const task = await Task.create({
-      title,
-      details,
-      team,
-      prior,
-      ongoing,
-      completed,
-      user_id,
-      protask,
-    });
-    res.status(200).json(task);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
+  let notf_id;
+  // console.log(selected);
+  let selfassigned = false;
+  if (protask === true) {
+    for (let id of selected) {
+      if (selected2) {
+        const notreq = await Notify({
+          admin_id: selected2._id,
+          req_id: id._id,
+          taskapp: "Please approve task of: " + id.email,
+        });
+        notreq.save();
+        console.log(notreq._id);
+        notf_id = notreq._id;
+      }
+      // Database
+      const mtask = await Task({
+        title,
+        details,
+        team,
+        prior,
+        ongoing,
+        completed,
+        notf_id,
+        user_id: id._id,
+        protask,
+        approved,
+      });
+      mtask.save();
+      // creating notifications
+      if (req.user._id.valueOf() === id._id) {
+        selfassigned = mtask;
+        // console.log(await User.findOne({ _id: id._id }));
+      }
+    }
+
+    if (selfassigned) {
+      res.status(200).json(selfassigned);
+    } else {
+      return res
+        .status(405)
+        .json({ error: "Warning: Not self assigned", emptyFields });
+    }
+  } else {
+    try {
+      const user_id = req.user._id;
+
+      const task = await Task.create({
+        title,
+        details,
+        team,
+        prior,
+        ongoing,
+        completed,
+        user_id,
+        protask,
+        approved: true,
+      });
+
+      res.status(200).json(task);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   }
 };
 
@@ -140,4 +226,5 @@ module.exports = {
   deleteTask,
   updateTask,
   completeTask,
+  deltNots2,
 };

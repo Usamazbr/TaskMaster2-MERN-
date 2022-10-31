@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 
 // User token authentication
 const tasksFilter = async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { authorization } = req.headers;
   if (!authorization) {
     return res.status(401).json({ error: "Token required" });

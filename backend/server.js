@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
+// const User = require("../models/userModel");
 
 // const connectDb = require("./db/connection");
 const mongoose = require("mongoose");
@@ -26,6 +27,8 @@ function loggerCon(req, res, next) {
 // Main routes
 app.use("/api/tasks", tasksRoutes);
 app.use("/api/user", userRoutes);
+
+// app.post("/")
 
 // connect to db
 mongoose

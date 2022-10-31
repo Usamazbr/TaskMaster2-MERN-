@@ -4,73 +4,33 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 const apiUrl = `http://localhost:5003`;
 
-const MemSelect = (props) => {
-  const [assigne, setAssigne] = useState([]);
+const MemSelect = ({ mems }) => {
   const [members, setMembers] = useState([]);
-  const temp = props.mems.data;
+  const assigne = mems.data;
+  // const hSubmit = async (e) => {
+  //   e.preventDefault();
+  // };
 
-  useEffect(() => {
-    setAssigne(props.mems.data);
-  }, []);
-  useEffect(() => {
-    props.selectMems(members);
-  }, [members]);
+  // const appMem=(m)=>{}
 
   const proTasker = async (e) => {
     const val = e.target.value;
-    const ob = temp.filter((f) => f.email === val);
-    setMembers((m) => {
-      return [...m, ob[0]];
-    });
-    setAssigne((a) => {
-      return a.filter((f) => f.email !== val);
-    });
+    setMembers([...members, val]);
+    mems.data = assigne.filter((f) => f.email !== val);
     var dropDown = document.getElementById("members");
     dropDown.selectedIndex = 0;
   };
 
   return (
     <div>
+      {members && members.map((member, index) => <p key={index}>{member}</p>)}
       <select id="members" name="mems" onChange={proTasker}>
         <option>select</option>
         <optgroup label="Juniors">
           {assigne.map((member, index) => (
             <option key={index}>{member.email}</option>
           ))}
-        </optgroup>
-      </select>
-    </div>
-  );
-};
-
-const SenSelect = (props) => {
-  const [assigne, setAssigne] = useState([]);
-  const [member, setMember] = useState("");
-  const temp = props.mems.data;
-
-  useEffect(() => {
-    setAssigne(props.mems.data);
-  }, []);
-  useEffect(() => {
-    props.selectMems(member);
-    // console.log(member);
-    // console.log(assigne);
-  }, [member]);
-
-  const proTasker = async (e) => {
-    const val = e.target.value;
-    const ob = temp.filter((f) => f.email === val);
-    setMember(ob[[0]]);
-  };
-
-  return (
-    <div>
-      <select id="member" name="mems" onChange={proTasker}>
-        <option>select</option>
-        <optgroup label="Seniors">
-          {assigne.map((member, index) => (
-            <option key={index}>{member.email}</option>
-          ))}
+          {/* {!assigne && <optgroup>(no juniors)</optgroup>} */}
         </optgroup>
       </select>
     </div>
@@ -81,11 +41,9 @@ const TaskForm = () => {
   const { dispatch } = useTasksContext();
   const { user } = useAuthContext();
   const mems = JSON.parse(localStorage.getItem("juniors"));
-  const mems2 = JSON.parse(localStorage.getItem("seniors"));
+  // console.log(mems.data[0]._id);
+  // const { dispatch } = useAuthContext();
 
-  const [selected, setSelected] = useState([]);
-  const [selected2, setSelected2] = useState("");
-  const [approved, setApproved] = useState(false);
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
   const [team, setTeam] = useState("");
@@ -97,15 +55,12 @@ const TaskForm = () => {
   const [emptyFields, setEmptyFields] = useState([]);
 
   useEffect(() => {
-    setSelected([]);
-    if (user.admin) {
-      setApproved(true);
-    }
-  }, []);
+    // console.log(mems.data);
+  }, [mems]);
 
   const togglestate = () => {
     var toggleBox = document.getElementById("myCheck");
-    console.log(approved);
+
     if (toggleBox.checked === true) {
       setOngoing(false);
       setCompleted(true);
@@ -130,10 +85,6 @@ const TaskForm = () => {
       setError("You're not logged in");
       return;
     }
-    if (!selected) {
-      setError("Assignees must be selected");
-      return;
-    }
 
     const task = {
       title,
@@ -143,9 +94,6 @@ const TaskForm = () => {
       ongoing,
       completed,
       protask,
-      selected,
-      approved,
-      selected2,
     };
 
     const response = await fetch(apiUrl + "/api/tasks", {
@@ -157,13 +105,10 @@ const TaskForm = () => {
       },
     });
     const json = await response.json();
-    // console.log(json);
+
     if (!response.ok) {
       setError(json.error);
       setEmptyFields(json.emptyFields);
-      setSelected([]);
-      setSelected2("");
-      setApproved(false);
     }
     if (response.ok) {
       setEmptyFields([]);
@@ -173,11 +118,7 @@ const TaskForm = () => {
       setTeam("");
       setPrior("");
       dispatch({ type: "CREATE_TASK", payload: json });
-      setSelected2("");
-      setSelected([]);
-      setApproved(false);
     }
-    setSelected([]);
   };
 
   return (
@@ -213,21 +154,8 @@ const TaskForm = () => {
         />
       </label>
 
-      {selected &&
-        selected.map((member, index) => <p key={index}>{member.email}</p>)}
-      {/* {user.admin ? (
-        <>
-          <label>Assignees:</label>
-          <MemSelect mems={mems} selectMems={(e) => setSelected(e)} />
-        </>
-      ) : (
-        <>
-          <label>Request senior:</label>
-          <SenSelect mems={mems} selectMems={(e) => setSelected(e)} />
-        </>
-      )} */}
       <label>Assignees:</label>
-      <MemSelect mems={mems} selectMems={(e) => setSelected(e)} />
+      <MemSelect mems={mems} />
 
       <label>
         Priority:
@@ -250,13 +178,6 @@ const TaskForm = () => {
         {user.admin ? <> Assign Task</> : <>Request task</>}
         <input type="checkbox" id="myCheck2" onClick={protoggle} />
       </label>
-      {protask && !user.admin && (
-        <label>
-          Request senior:
-          <SenSelect mems={mems2} selectMems={(e) => setSelected2(e)} />
-          {/* <p>{selected2}</p> */}
-        </label>
-      )}
 
       <button>Add Task</button>
       {error && <div className="error">{error}</div>}

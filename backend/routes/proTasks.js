@@ -6,6 +6,7 @@ const {
   deleteTask,
   updateTask,
   completeTask,
+  deltNots2,
 } = require("../controllers/taskController");
 const tasksFilter = require("../middleware/tasksFilter");
 
@@ -22,6 +23,9 @@ router.post("/", createTask);
 
 // ID requests
 router.route("/:Taskid").get(getTask).delete(deleteTask).patch(updateTask);
+
+// Notify
+router.route("/Nots/:User").delete(deltNots2);
 
 // Is compplete
 router.route("/:Taskid/:togglecomplete").patch(completeTask);

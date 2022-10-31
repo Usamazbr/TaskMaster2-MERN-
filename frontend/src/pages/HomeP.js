@@ -4,6 +4,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 import TaskShow from "../components/TaskShow";
 import TaskForm from "../components/TaskForm";
+import HierS from "../components/HierS";
 
 const HomeP = () => {
   const { tasks, dispatch } = useTasksContext();
@@ -24,6 +25,7 @@ const HomeP = () => {
     if (user) {
       taskFetch();
     }
+    // console.log(user.path);
   }, [dispatch, user]);
 
   return (
@@ -32,9 +34,11 @@ const HomeP = () => {
         {tasks &&
           tasks.map((task) =>
             task.protask ? (
-              <div className="pro-task" key={task._id}>
-                <TaskShow task={task} />
-              </div>
+              task.approved && (
+                <div className="pro-task" key={task._id}>
+                  <TaskShow task={task} />
+                </div>
+              )
             ) : (
               <div className="normal-task" key={task._id}>
                 <TaskShow className="normal-task" task={task} />
@@ -42,7 +46,17 @@ const HomeP = () => {
             )
           )}
       </div>
-      <TaskForm />
+      <div>
+        {/* {!user.approve && } */}
+        {user.approve ? (
+          <TaskForm />
+        ) : (
+          <div>
+            <h4>Approve First</h4>
+            {!user.path && <HierS />}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
