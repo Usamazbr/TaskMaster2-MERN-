@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useTasksContext } from "../hooks/useTasksContext";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useLogout } from "../hooks/useLogout";
 
 import TaskShow from "../components/TaskShow";
 import TaskForm from "../components/TaskForm";
@@ -9,6 +10,7 @@ import HierS from "../components/HierS";
 const HomeP = () => {
   const { tasks, dispatch } = useTasksContext();
   const { user } = useAuthContext();
+  const { logout } = useLogout();
 
   useEffect(() => {
     const apiUrl = `http://localhost:5003`;
@@ -25,6 +27,9 @@ const HomeP = () => {
     if (user) {
       taskFetch();
     }
+    setTimeout(() => {
+      logout();
+    }, 60000);
   }, [dispatch, user]);
 
   return (

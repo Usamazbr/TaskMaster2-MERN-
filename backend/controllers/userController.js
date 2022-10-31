@@ -112,7 +112,7 @@ const getSeniors = async (req, res) => {
   const user_path = await User.find({ email: user_email });
   const sen_path = user_path[0].path;
   const user_arr = sen_path?.split(",");
-
+  // if (user_arr.length > 1) {
   user_arr.shift();
   user_arr.pop();
   console.log(user_arr);
@@ -122,6 +122,9 @@ const getSeniors = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err });
   }
+  // } else {
+  //   res.status(200);
+  // }
 };
 
 // signup user
