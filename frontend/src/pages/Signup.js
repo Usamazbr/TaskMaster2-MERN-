@@ -21,14 +21,6 @@ const Signup = () => {
       setAdmin(false);
     }
   };
-  // const toggleAp = () => {
-  //   var toggAp = document.getElementById("apCheck");
-  //   if (toggAp.checked === true) {
-  //     setApprove(true);
-  //   } else {
-  //     setApprove(false);
-  //   }
-  // };
 
   return (
     <form className="signup" onSubmit={handleSubmit}>
@@ -40,12 +32,6 @@ const Signup = () => {
         onChange={(e) => setEmail(e.target.value)}
         value={email}
       />
-      {/* <label>Username:</label>
-      <input
-        type="username"
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-      /> */}
       <label>Password:</label>
       <input
         type="password"
@@ -56,14 +42,7 @@ const Signup = () => {
       <label className="switch">
         Are you making an admin account?
         <input type="checkbox" id="adminCheck" onClick={toggle} />
-        {/* <span className="slider round"></span> */}
       </label>
-
-      {/* <label className="switch">
-        Approval
-        <input type="checkbox" id="apCheck" onClick={toggleAp} />
-      </label> */}
-
       <label>{!admin && <input />}</label>
 
       <button disabled={loadState}>Sign up</button>

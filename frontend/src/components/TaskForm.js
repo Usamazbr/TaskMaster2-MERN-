@@ -53,8 +53,6 @@ const SenSelect = (props) => {
   }, []);
   useEffect(() => {
     props.selectMems(member);
-    // console.log(member);
-    // console.log(assigne);
   }, [member]);
 
   const proTasker = async (e) => {
@@ -215,17 +213,7 @@ const TaskForm = () => {
 
       {selected &&
         selected.map((member, index) => <p key={index}>{member.email}</p>)}
-      {/* {user.admin ? (
-        <>
-          <label>Assignees:</label>
-          <MemSelect mems={mems} selectMems={(e) => setSelected(e)} />
-        </>
-      ) : (
-        <>
-          <label>Request senior:</label>
-          <SenSelect mems={mems} selectMems={(e) => setSelected(e)} />
-        </>
-      )} */}
+
       <label>Assignees:</label>
       <MemSelect mems={mems} selectMems={(e) => setSelected(e)} />
 
@@ -254,7 +242,6 @@ const TaskForm = () => {
         <label>
           Request senior:
           <SenSelect mems={mems2} selectMems={(e) => setSelected2(e)} />
-          {/* <p>{selected2}</p> */}
         </label>
       )}
 

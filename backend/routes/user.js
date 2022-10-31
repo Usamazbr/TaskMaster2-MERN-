@@ -29,8 +29,6 @@ router.route("/Nots/:User").get(getAllNots).delete(delNots);
 
 //ID requests
 router.route("/:User");
-// .get(getUser)
-// .delete(deleteUser)
 router.route("/hier/:User").patch(setHier);
 
 module.exports = router;

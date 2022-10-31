@@ -22,10 +22,7 @@ const getTasks = async (req, res) => {
 // delete a notification
 const deltNots2 = async (req, res) => {
   const Nots_id = req.params.User;
-  // console.log(Nots_id);
 
-  // const reqr = await Notify.findById(Nots_id);
-  // console.log(reqr.req_id);
   const taskp = await Task.findOneAndUpdate(
     { notf_id: Nots_id },
     {
@@ -95,7 +92,7 @@ const createTask = async (req, res) => {
   }
 
   let notf_id;
-  // console.log(selected);
+
   let selfassigned = false;
   if (protask === true) {
     for (let id of selected) {
@@ -126,7 +123,6 @@ const createTask = async (req, res) => {
       // creating notifications
       if (req.user._id.valueOf() === id._id) {
         selfassigned = mtask;
-        // console.log(await User.findOne({ _id: id._id }));
       }
     }
 

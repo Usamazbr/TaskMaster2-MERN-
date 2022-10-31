@@ -25,7 +25,6 @@ const HomeP = () => {
     if (user) {
       taskFetch();
     }
-    // console.log(user.path);
   }, [dispatch, user]);
 
   return (
@@ -47,7 +46,6 @@ const HomeP = () => {
           )}
       </div>
       <div>
-        {/* {!user.approve && } */}
         {user.approve ? (
           <TaskForm />
         ) : (

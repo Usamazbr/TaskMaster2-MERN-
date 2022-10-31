@@ -9,21 +9,11 @@ const HierS = () => {
   console.log(mems);
   console.log(self);
   const [done, setDone] = useState(false);
-  //   const [members, setMembers] = useState([]);
-  //   const temp = props.mems.data;
-
-  //   useEffect(() => {
-  //     setAssigne(props.mems.data);
-  //   }, []);
-  //   useEffect(() => {
-  //     props.selectMems(members);
-  //   }, [members]);
 
   const selecter = async (e) => {
     const val = e.target.value;
     const ob = mems.data.filter((f) => f.email === val);
 
-    // console.log(ob[0]);
     const response = await fetch(apiUrl + "/user/hier/" + ob[0]._id, {
       method: "PATCH",
       body: JSON.stringify(self),
@@ -31,12 +21,6 @@ const HierS = () => {
     });
     const json = await response.json();
     setDone(true);
-    //   setMembers((m) => {
-    //     return [...m, ob[0]];
-    //   });
-    //   setAssigne((a) => {
-    //     return a.filter((f) => f.email !== val);
-    //   });
     var dropDown = document.getElementById("members");
     dropDown.selectedIndex = 0;
   };
