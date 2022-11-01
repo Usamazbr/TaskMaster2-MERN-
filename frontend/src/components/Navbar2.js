@@ -95,9 +95,15 @@ const Notifications = (props) => {
 const Navbar2 = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
+  // const [hier, setHier] = useState(false);
+
   const handleClick = () => {
     logout();
   };
+
+  // const hClick = () => {
+  // setHier;
+  // };
 
   return (
     <header>
@@ -108,6 +114,7 @@ const Navbar2 = () => {
         <nav>
           {user && (
             <div>
+              {/* <button onClick={hClick}>Hierarchy</button> */}
               <span>
                 <Notifications email={user.email} user={user} />
               </span>

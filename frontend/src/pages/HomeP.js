@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useTasksContext } from "../hooks/useTasksContext";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from "../hooks/useLogout";
@@ -11,6 +11,9 @@ const HomeP = () => {
   const { tasks, dispatch } = useTasksContext();
   const { user } = useAuthContext();
   const { logout } = useLogout();
+  const timer = useRef(null);
+  const expireTime = 60 * 1000;
+  const startTime = localStorage.getItem("time");
 
   useEffect(() => {
     const apiUrl = `http://localhost:5003`;
@@ -27,10 +30,20 @@ const HomeP = () => {
     if (user) {
       taskFetch();
     }
-    setTimeout(() => {
-      logout();
-    }, 60000);
   }, [dispatch, user]);
+
+  // session expires after time = expireTime
+  useEffect(() => {
+    console.log(new Date().getTime() - startTime);
+    console.log(expireTime);
+    if (new Date().getTime() - startTime <= expireTime) {
+      timer.current = setTimeout(() => {
+        logout();
+      }, expireTime - (new Date().getTime() - startTime));
+    } else {
+      logout();
+    }
+  }, []);
 
   return (
     <div className="home">

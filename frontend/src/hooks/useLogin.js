@@ -52,6 +52,8 @@ export const useLogin = () => {
       localStorage.setItem("juniors", JSON.stringify(json2));
       localStorage.setItem("seniors", JSON.stringify(json4));
       localStorage.setItem("users", JSON.stringify(json3));
+      const startTime = new Date().getTime();
+      localStorage.setItem("time", JSON.stringify(startTime));
 
       dispatch({ type: "LOGIN", payload: json });
       setLoadState(false);
