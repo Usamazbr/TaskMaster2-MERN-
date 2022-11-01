@@ -1,7 +1,6 @@
 const Task = require("../models/taskModel");
 const mongoose = require("mongoose");
 const Notify = require("../models/notifyModel");
-const User = require("../models/userModel");
 
 // get all Tasks
 const getTasks = async (req, res) => {
