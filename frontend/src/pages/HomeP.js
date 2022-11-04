@@ -12,7 +12,7 @@ const HomeP = () => {
   const { user } = useAuthContext();
   const { logout } = useLogout();
   const timer = useRef(null);
-  const expireTime = 60 * 1000;
+  const expireTime = 100 * 60 * 1000;
   const startTime = localStorage.getItem("time");
 
   useEffect(() => {

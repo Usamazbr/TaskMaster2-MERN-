@@ -43,7 +43,6 @@ const Signup = () => {
         Are you making an admin account?
         <input type="checkbox" id="adminCheck" onClick={toggle} />
       </label>
-      <label>{!admin && <input />}</label>
 
       <button disabled={loadState}>Sign up</button>
       {err && <div className="error">{err}</div>}
