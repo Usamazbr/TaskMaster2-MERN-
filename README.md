@@ -1,2 +1,2 @@
 # TaskMaster2
-why
+Free test app for assigning tasks to authenticated users
